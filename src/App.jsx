@@ -1,20 +1,36 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+import React, { useState } from "react";
 import ProductList from "./components/ProductList";
-import Cart from "./pages/Cart";
-import AboutUs from "./pages/AboutUs";
 
-function App() {
+const App = () => {
+  const [showProducts, setShowProducts] = useState(false);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/plants" element={<ProductList />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/about" element={<AboutUs />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="background-image" style={{ textAlign: "center" }}>
+      {!showProducts ? (
+        <div style={{ paddingTop: "150px" }}>
+          <h1>Welcome to Paradise Nursery</h1>
+
+          <p>
+            Discover a wide variety of beautiful plants to bring life into your home.
+          </p>
+
+          <button
+            onClick={() => setShowProducts(true)}
+            style={{
+              padding: "10px 20px",
+              fontSize: "18px",
+              cursor: "pointer",
+              marginTop: "20px",
+            }}
+          >
+            Get Started
+          </button>
+        </div>
+      ) : (
+        <ProductList />
+      )}
+    </div>
   );
-}
+};
 
 export default App;
