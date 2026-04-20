@@ -4,21 +4,23 @@ import {
   increaseQuantity,
   decreaseQuantity,
   removeFromCart,
-} from "../CartSlice";
+} from "../redux/CartSlice";
 import { Link } from "react-router-dom";
 
 const CartItem = () => {
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.items);
+
+  // FIX: safer state access
+  const cartItems = useSelector((state) => state.cart.items || []);
 
   // Total calculations
   const totalItems = cartItems.reduce(
-    (sum, item) => sum + item.quantity,
+    (sum, item) => sum + (item.quantity || 0),
     0
   );
 
   const totalCost = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + (item.price || 0) * (item.quantity || 0),
     0
   );
 
@@ -52,21 +54,23 @@ const CartItem = () => {
               alt={item.name}
               width="80"
               height="80"
+              style={{ objectFit: "cover" }}
             />
 
             {/* Details */}
             <div>
               <h3>{item.name}</h3>
               <p>Price: R {item.price}</p>
-              <p>Subtotal: R {item.price * item.quantity}</p>
+              <p>
+                Subtotal: R {(item.price * item.quantity).toFixed(2)}
+              </p>
             </div>
 
             {/* Controls */}
             <div style={{ marginLeft: "auto" }}>
               <button
-                onClick={() =>
-                  dispatch(decreaseQuantity(item.id))
-                }
+                onClick={() => dispatch(decreaseQuantity(item.id))}
+                disabled={item.quantity <= 1}
               >
                 -
               </button>
@@ -76,17 +80,13 @@ const CartItem = () => {
               </span>
 
               <button
-                onClick={() =>
-                  dispatch(increaseQuantity(item.id))
-                }
+                onClick={() => dispatch(increaseQuantity(item.id))}
               >
                 +
               </button>
 
               <button
-                onClick={() =>
-                  dispatch(removeFromCart(item.id))
-                }
+                onClick={() => dispatch(removeFromCart(item.id))}
                 style={{ marginLeft: "10px", color: "red" }}
               >
                 Delete
@@ -98,7 +98,7 @@ const CartItem = () => {
 
       {/* Buttons */}
       <div style={{ marginTop: "20px" }}>
-        <button onClick={() => alert("Coming Soon 🚧")}>
+        <button onClick={() => alert("Checkout feature coming soon 🚧")}>
           Checkout
         </button>
 
