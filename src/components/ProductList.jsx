@@ -1,40 +1,90 @@
+import React from "react";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/CartSlice";
-import Header from "./Header";
+import { addItem } from "../redux/CartSlice";
 
-const plants = [
-  { id: 1, name: "Snake Plant", price: 120, category: "Indoor" },
-  { id: 2, name: "Aloe Vera", price: 90, category: "Indoor" },
-  { id: 3, name: "Peace Lily", price: 150, category: "Flowering" },
-  { id: 4, name: "Rose", price: 200, category: "Flowering" },
-  { id: 5, name: "Bonsai", price: 300, category: "Decorative" },
-  { id: 6, name: "Ficus", price: 250, category: "Decorative" },
+const products = [
+  {
+    id: 1,
+    name: "Aloe Vera",
+    price: 50,
+    image: "https://source.unsplash.com/200x200/?aloe",
+    category: "Indoor",
+  },
+  {
+    id: 2,
+    name: "Snake Plant",
+    price: 80,
+    image: "https://source.unsplash.com/200x200/?snake-plant",
+    category: "Indoor",
+  },
+  {
+    id: 3,
+    name: "Rose",
+    price: 40,
+    image: "https://source.unsplash.com/200x200/?rose",
+    category: "Outdoor",
+  },
+  {
+    id: 4,
+    name: "Lavender",
+    price: 60,
+    image: "https://source.unsplash.com/200x200/?lavender",
+    category: "Outdoor",
+  },
+  {
+    id: 5,
+    name: "Cactus",
+    price: 30,
+    image: "https://source.unsplash.com/200x200/?cactus",
+    category: "Succulent",
+  },
+  {
+    id: 6,
+    name: "Bamboo",
+    price: 90,
+    image: "https://source.unsplash.com/200x200/?bamboo",
+    category: "Indoor",
+  },
 ];
 
-export default function ProductList() {
+const ProductList = () => {
   const dispatch = useDispatch();
 
   return (
-    <div>
-      <Header />
-      <h2>Plants</h2>
+    <div style={{ padding: "20px" }}>
+      <h1>Plants Store</h1>
 
-      {["Indoor", "Flowering", "Decorative"].map(cat => (
-        <div key={cat}>
-          <h3>{cat}</h3>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+        {products.map((product) => (
+          <div
+            key={product.id}
+            style={{
+              border: "1px solid #ccc",
+              padding: "10px",
+              width: "200px",
+            }}
+          >
+            <img
+              src={product.image}
+              alt={product.name}
+              width="100%"
+              height="150"
+            />
 
-          {plants.filter(p => p.category === cat).map(p => (
-            <div key={p.id}>
-              <p>{p.name}</p>
-              <p>R{p.price}</p>
+            <h3>{product.name}</h3>
+            <p>Category: {product.category}</p>
+            <p>R {product.price}</p>
 
-              <button onClick={() => dispatch(addToCart(p))}>
-                Add to Cart
-              </button>
-            </div>
-          ))}
-        </div>
-      ))}
+            <button
+              onClick={() => dispatch(addItem(product))}
+            >
+              Add to Cart
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
+};
+
+export default ProductList;
